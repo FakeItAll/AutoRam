@@ -1,6 +1,10 @@
+from abc import abstractmethod
+
+
 class BaseSchema(object):
     def __init__(self):
         self.name = 'default'
+        self.code = 'DEFAULT'
         self.ins = []
         self.outs = []
 
@@ -11,5 +15,6 @@ class BaseSchema(object):
         self.ins = [0 for i in range(self.io_params['count'][0])]
         self.outs = [0 for i in range(self.io_params['count'][1])]
 
+    @abstractmethod
     def f(self, _in):
         pass

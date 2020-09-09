@@ -1,5 +1,5 @@
 from loader import Loader
-
+import a
 
 def main():
     loader = Loader('')
@@ -15,4 +15,5 @@ def main():
     print(d[1].outs)
 
 
-main()
+if __name__ == '__main__':
+    main()
