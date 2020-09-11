@@ -3,16 +3,16 @@ from baseschema import BaseSchema
 
 class Schema(BaseSchema):
     def __init__(self):
+        super().__init__()
         self.name = 'And'
         self.code = 'AND'
         self.io_settings = {
-            'count': [2, 1],
-            'pins': {
-                'in_names': ['I1', 'I2'],
-                'out_names': ['RES'],
-            }
+            'names': [
+                ['I1', 'I2'],
+                ['RES']
+            ]
         }
-        super().__init__()
+        self.post_init()
 
     def f(self):
         self.outs['RES'] = int(self.ins['I1'] and self.ins['I2'])

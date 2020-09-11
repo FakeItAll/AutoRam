@@ -1,6 +1,5 @@
 class Connector(object):
-    def __init__(self, schema_from):
-        self.schema_from = schema_from
+    def __init__(self):
         self.schemas_to = {}
 
     def add(self, schema_to, connections):
@@ -12,3 +11,18 @@ class Connector(object):
 
     def remove(self, schema_to):
         self.schemas_to.pop(schema_to.uid, None)
+
+    def empty(self):
+        return not self.schemas_to
+
+    def schema_binds(self):
+        return list(self.schemas_to.keys())
+
+    def pins_from(self, schema_to_uid):
+        return list(self.schemas_to[schema_to_uid].keys())
+
+    def pins_to(self, schema_to_uid):
+        return list(self.schemas_to[schema_to_uid].values())
+
+    def raw(self, schema_to_uid):
+        return self.schemas_to.get(schema_to_uid)

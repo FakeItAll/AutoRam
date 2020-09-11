@@ -1,7 +1,11 @@
 class CollectManager(object):
     @staticmethod
-    def log(*log_data):
-        print('{} ({}): {} => {}'.format(*log_data))
+    def log(log_id, *log_data):
+        if log_id == 1:
+            print('{} ({}): {} => {}'.format(*log_data))
+        elif log_id == 2:
+            print('{} => {}: {}'.format(*log_data))
+        print()
 
     def __init__(self):
         self.collect = {  # example
@@ -27,48 +31,41 @@ class CollectManager(object):
         self.visited.update({schema.uid: False})
         return schema.uid
 
-    def connect(self, all_connects):
-        for schema_out_uid, schema_out_connects in all_connects.items():
-            if self.connects.get(schema_out_uid):
-                self.connects[schema_out_uid].update(schema_out_connects)
-            else:
-                self.connects.update({schema_out_uid: schema_out_connects})
+    def remove(self, schema):
+        self.collect.pop(schema.uid, None)
+        self.visited.pop(schema.uid, None)
+        return schema.uid
 
-    def step(self, uid, ins, logs):
-        self.visited[uid] = True
-        schema = self.collect[uid]
-        schema.ins = ins
-        schema.f()
-        outs = schema.outs
+    def step(self, schema_cur, ins, logs):
+        if not self.collect.get(schema_cur.uid):
+            return
+
+        self.visited[schema_cur.uid] = True
+        schema_cur.ins = ins
+        schema_cur.f()
+        outs = schema_cur.outs
+
         if logs:
-            self.log(schema.code, schema.uid, ins, outs)
+            self.log(1, schema_cur.code, schema_cur.uid, ins, outs)
 
-        if not self.connects.get(uid):
+        if schema_cur.connector.empty():
             return
 
-        item_connects = self.connects[uid]
-        schema_ins = []
-
-        new_ins = {uid: {} for uid in schema_ins}
-        for out_pin, schema_input in item_connects.items():
-            input_uid = schema_input[0]
-            if not self.visited[input_uid] and input_uid not in schema_ins:
-                schema_ins.append(input_uid)
-            in_pin = schema_input[1]
-            if new_ins.get(input_uid):
-                new_ins[input_uid].update({in_pin: outs[out_pin]})
-            else:
-                new_ins.update({input_uid: {in_pin: outs[out_pin]}})
-
-        if not schema_ins:
-            return
-
-        for uid, ins in new_ins.items():
-            self.step(uid, ins, logs)
+        connector = schema_cur.connector
+        for schema_to_uid in connector.schema_binds():
+            new_ins = {}
+            out_pins = connector.pins_from(schema_to_uid)
+            in_pins = connector.pins_to(schema_to_uid)
+            for i in range(len(out_pins)):
+                new_ins.update({in_pins[i]: outs[out_pins[i]]})
+            if self.collect.get(schema_to_uid):
+                if logs:
+                    self.log(2, schema_cur.uid, schema_to_uid, connector.raw(schema_to_uid))
+                self.step(self.collect[schema_to_uid], new_ins, logs)
 
     def clean(self):
         self.visited = {uid: False for uid in self.visited.keys()}
 
-    def execute(self, start_uid, ins, logs=False):
+    def execute(self, start_schema, ins, logs=False):
         self.clean()
-        self.step(start_uid, ins, logs)
+        self.step(start_schema, ins, logs)

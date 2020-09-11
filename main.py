@@ -11,18 +11,20 @@ def main():
     mod2 = loader.load_schema('decryptor')
     mod3 = loader.load_schema('and')
 
-    uid1 = cm.add(mod1)
-    uid2 = cm.add(mod2)
-    cm.connect({uid1: {'D0': [uid2, 'A'], 'D1': [uid2, 'B'], 'D2': [uid2, 'C']}})
+    mod1.connector.add(mod2, {'D0': 'A', 'D1': 'B', 'D2': 'C'})
+    mod2.connector.add(mod3, {'D0': 'I1', 'D1': 'I2'})
 
-    uid3 = cm.add(mod3)
-    cm.connect({uid2: {'D0': [uid3, 'I1'], 'D1': [uid3, 'I2']}})
+    cm.add(mod1)
+    cm.add(mod2)
+    cm.add(mod3)
 
     ins = {'A': 1, 'B': 0, 'C': 0}
-    cm.execute(uid1, ins, True)
+    cm.execute(mod1, ins, True)
 
     mw = MainWindow()
-    mw.draw_schema(mod1, [360, 60])
+    mw.draw_schema(mod1, [100, 300])
+    mw.draw_schema(mod2, [50, 150])
+    mw.draw_schema(mod3, [60, 40])
     mw.execute()
 
 

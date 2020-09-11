@@ -3,16 +3,16 @@ from baseschema import BaseSchema
 
 class Schema(BaseSchema):
     def __init__(self):
+        super().__init__()
         self.name = 'Decryptor'
         self.code = 'DC'
         self.io_settings = {
-            'count': [3, 8],
-            'pins': {
-                'in_names': ['A', 'B', 'C'],
-                'out_names': ['D0', 'D1', 'D2', 'D3', 'D4', 'D5', 'D6', 'D7'],
-            }
+            'names': [
+                ['A', 'B', 'C'],
+                ['D0', 'D1', 'D2', 'D3', 'D4', 'D5', 'D6', 'D7'],
+            ]
         }
-        super().__init__()
+        self.post_init()
 
     def f(self):
         self.outs['D0'] = int(not self.ins['A'] and not self.ins['B'] and not self.ins['C'])

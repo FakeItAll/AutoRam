@@ -5,7 +5,7 @@ class MainWindow(object):
     def __init__(self):
         root = tk.Tk()
         root.title('AutoRAM')
-        root.geometry('1200x400+100+100')
+        root.geometry('1000x400+100+100')
         # root.state('zoomed')
         self.root = root
 
@@ -23,10 +23,14 @@ class MainWindow(object):
         self.consts = {'center': tk.CENTER, 'first': tk.FIRST, 'last': tk.LAST, 'arrow_length': 20}
 
     def draw_schema(self, schema, rect_coords=[]):
-        in_count, out_count = schema.io_settings['count']
+        if schema.io_settings.get('names'):
+            in_names, out_names = schema.io_settings['names']
+            in_count, out_count = len(in_names), len(out_names)
+        else:
+            in_count, out_count = schema.io_settings['count']
 
-        width = max(in_count, out_count) * 20
-        height = 40
+        width = max(in_count, out_count) * 25
+        height = 60
 
         rect_coords.append(rect_coords[0] + width)
         rect_coords.append(rect_coords[1] + height)
@@ -44,6 +48,8 @@ class MainWindow(object):
             from_y = rect_coords[3]
             to_y = rect_coords[3] + self.consts['arrow_length']
             self.canvas.create_line(cur_x, from_y, cur_x, to_y, arrow=self.consts['first'])
+            self.canvas.create_text(cur_x, from_y - 8,
+                                    text=in_names[i], justify=self.consts['center'], font='Arial 8')
 
         shift = width // (out_count + 1)
         for i in range(out_count):
@@ -51,6 +57,8 @@ class MainWindow(object):
             from_y = rect_coords[1]
             to_y = rect_coords[1] - self.consts['arrow_length']
             self.canvas.create_line(cur_x, from_y, cur_x, to_y, arrow=self.consts['last'])
+            self.canvas.create_text(cur_x, from_y + 8,
+                                    text=out_names[i], justify=self.consts['center'], font='Arial 8')
 
         return schema.uid
 
