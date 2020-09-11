@@ -27,6 +27,6 @@ def main():
     mw.draw_schema(mod3, [60, 40])
     mw.execute()
 
-
+"Тест"
 if __name__ == '__main__':
     main()
