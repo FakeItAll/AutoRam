@@ -6,10 +6,14 @@ class Schema(BaseSchema):
         self.name = 'And'
         self.code = 'AND'
         self.io_settings = {
-            'count': [2, 1]
+            'count': [2, 1],
+            'pins': {
+                'in_names': ['I1', 'I2'],
+                'out_names': ['RES'],
+            }
         }
         super().__init__()
 
     def f(self):
         super().validate()
-        self.outs[0] = int(self.ins[0] and self.ins[1])
+        self.outs['RES'] = int(self.ins['I1'] and self.ins['I2'])

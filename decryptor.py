@@ -6,17 +6,21 @@ class Schema(BaseSchema):
         self.name = 'Decryptor'
         self.code = 'DC'
         self.io_settings = {
-            'count': [3, 8]
+            'count': [3, 8],
+            'pins': {
+                'in_names': ['A', 'B', 'C'],
+                'out_names': ['D0', 'D1', 'D2', 'D3', 'D4', 'D5', 'D6', 'D7'],
+            }
         }
         super().__init__()
 
     def f(self):
         super().validate()
-        self.outs[0] = int(not self.ins[0] and not self.ins[1] and not self.ins[2])
-        self.outs[1] = int(not self.ins[0] and not self.ins[1] and self.ins[2])
-        self.outs[2] = int(not self.ins[0] and self.ins[1] and not self.ins[2])
-        self.outs[3] = int(not self.ins[0] and self.ins[1] and self.ins[2])
-        self.outs[4] = int(self.ins[0] and not self.ins[1] and not self.ins[2])
-        self.outs[5] = int(self.ins[0] and not self.ins[1] and self.ins[2])
-        self.outs[6] = int(self.ins[0] and self.ins[1] and not self.ins[2])
-        self.outs[7] = int(self.ins[0] and self.ins[1] and self.ins[2])
+        self.outs['D0'] = int(not self.ins['A'] and not self.ins['B'] and not self.ins['C'])
+        self.outs['D1'] = int(not self.ins['A'] and not self.ins['B'] and self.ins['C'])
+        self.outs['D2'] = int(not self.ins['A'] and self.ins['B'] and not self.ins['C'])
+        self.outs['D3'] = int(not self.ins['A'] and self.ins['B'] and self.ins['C'])
+        self.outs['D4'] = int(self.ins['A'] and not self.ins['B'] and not self.ins['C'])
+        self.outs['D5'] = int(self.ins['A'] and not self.ins['B'] and self.ins['C'])
+        self.outs['D6'] = int(self.ins['A'] and self.ins['B'] and not self.ins['C'])
+        self.outs['D7'] = int(self.ins['A'] and self.ins['B'] and self.ins['C'])

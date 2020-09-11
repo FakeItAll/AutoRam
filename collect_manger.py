@@ -1,13 +1,26 @@
 class CollectManager(object):
+    @staticmethod
+    def log(*log_data):
+        print('{} ({}): {} => {}'.format(*log_data))
+
     def __init__(self):
+        self.collect = {  # example
+            'uid-1': object,
+            'uid-2': object,
+        }
         self.collect = {}
+
+        self.visited = {  # example
+            'uid-1': False,
+            'uid-2': False,
+        }
         self.visited = {}
+
         self.connects = {  # example
             'uid-1': {0: ['uid-2', 0]},
             'uid-2': {0: ['uid-3', 0], 1: ['uid-3', 1]}
         }
         self.connects = {}
-        self.pointer = 0
 
     def add(self, schema):
         self.collect.update({schema.uid: schema})
@@ -28,7 +41,7 @@ class CollectManager(object):
         schema.f()
         outs = schema.outs
         if logs:
-            print('{} => {}'.format(ins, outs))
+            self.log(schema.code, schema.uid, ins, outs)
 
         if not self.connects.get(uid):
             return
@@ -50,10 +63,12 @@ class CollectManager(object):
         if not schema_ins:
             return
 
-        print(new_ins)
         for uid, ins in new_ins.items():
             self.step(uid, ins, logs)
 
-    def execute(self, start_uid, ins, logs=False):
+    def clean(self):
         self.visited = {uid: False for uid in self.visited.keys()}
+
+    def execute(self, start_uid, ins, logs=False):
+        self.clean()
         self.step(start_uid, ins, logs)

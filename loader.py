@@ -2,14 +2,15 @@ import importlib.util as imp_util
 
 
 class Loader(object):
-
     uid_counter = 0
 
     @staticmethod
     def generate_uid():
-        prexif = 'schid-'
         Loader.uid_counter += 1
-        return prexif + str(Loader.uid_counter)
+        prexif = 'schid-'
+        uhash = Loader.uid_counter
+        postfix = ''
+        return '{}{}{}'.format(prexif, uhash, postfix)
 
     def __init__(self, dir=''):
         self.dir = dir
@@ -24,9 +25,9 @@ class Loader(object):
         if not module_spec:
             print('Module {} not found!'.format(name))
             return None
-        else:
-            module = imp_util.module_from_spec(module_spec)
-            module_spec.loader.exec_module(module)
+
+        module = imp_util.module_from_spec(module_spec)
+        module_spec.loader.exec_module(module)
 
         schema = module.Schema()
         schema.uid = self.generate_uid()
