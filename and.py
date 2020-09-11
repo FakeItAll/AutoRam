@@ -15,4 +15,4 @@ class Schema(BaseSchema):
         self.post_init()
 
     def f(self):
-        self._outs['RES'] = int(self._ins['I1'] and self._ins['I2'])
+        self.outs['RES'] = int(self.ins['I1'] and self.ins['I2'])
