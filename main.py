@@ -17,7 +17,7 @@ def main():
     uid3 = cm.add(mod3)
     cm.connect({uid2: {0: [uid3, 0], 1: [uid3, 1]}})
 
-    ins = {0: 1, 1: 1, 2: 1}
+    ins = {0: 1, 1: 0, 2: 0}
     cm.execute(uid1, ins, True)
 
 

@@ -20,7 +20,6 @@ class CollectManager(object):
                 self.connects[schema_out_uid].update(schema_out_connects)
             else:
                 self.connects.update({schema_out_uid: schema_out_connects})
-        print(self.connects)
 
     def step(self, uid, ins, logs):
         self.visited[uid] = True
@@ -29,7 +28,7 @@ class CollectManager(object):
         schema.f()
         outs = schema.outs
         if logs:
-            print(outs)
+            print('{} => {}'.format(ins, outs))
 
         if not self.connects.get(uid):
             return
@@ -44,13 +43,14 @@ class CollectManager(object):
                 schema_ins.append(input_uid)
             in_pin = schema_input[1]
             if new_ins.get(input_uid):
-                new_ins[input_uid].update({in_pin: ins[out_pin]})
+                new_ins[input_uid].update({in_pin: outs[out_pin]})
             else:
-                new_ins.update({input_uid: {in_pin: ins[out_pin]}})
+                new_ins.update({input_uid: {in_pin: outs[out_pin]}})
 
         if not schema_ins:
             return
 
+        print(new_ins)
         for uid, ins in new_ins.items():
             self.step(uid, ins, logs)
 
