@@ -15,7 +15,6 @@ class Schema(BaseSchema):
         super().__init__()
 
     def f(self):
-        super().validate()
         self.outs['D0'] = int(not self.ins['A'] and not self.ins['B'] and not self.ins['C'])
         self.outs['D1'] = int(not self.ins['A'] and not self.ins['B'] and self.ins['C'])
         self.outs['D2'] = int(not self.ins['A'] and self.ins['B'] and not self.ins['C'])

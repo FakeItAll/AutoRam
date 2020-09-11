@@ -2,7 +2,18 @@ from abc import abstractmethod
 
 
 class BaseSchema(object):
+    uid_counter = 0
+
+    @staticmethod
+    def generate_uid():
+        BaseSchema.uid_counter += 1
+        prexif = 'schuid-'
+        uhash = BaseSchema.uid_counter
+        postfix = ''
+        return '{}{}{}'.format(prexif, uhash, postfix)
+
     def __init__(self):
+        self.uid = self.generate_uid()
         self.name = self.name or 'default'
         self.code = self.code or 'DEFAULT'
         self.ins = {}
@@ -25,10 +36,6 @@ class BaseSchema(object):
         else:
             self.outs = {i: 0 for i in range(self.io_settings['count'][1])}
 
-    def validate(self):
-        for pin, val in self.ins.items():
-            self.ins[pin] = int(val)
-
     @abstractmethod
     def f(self):
-        self.validate()
+        pass

@@ -15,5 +15,4 @@ class Schema(BaseSchema):
         super().__init__()
 
     def f(self):
-        super().validate()
         self.outs['RES'] = int(self.ins['I1'] and self.ins['I2'])

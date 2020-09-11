@@ -2,16 +2,6 @@ import importlib.util as imp_util
 
 
 class Loader(object):
-    uid_counter = 0
-
-    @staticmethod
-    def generate_uid():
-        Loader.uid_counter += 1
-        prexif = 'schid-'
-        uhash = Loader.uid_counter
-        postfix = ''
-        return '{}{}{}'.format(prexif, uhash, postfix)
-
     def __init__(self, dir=''):
         self.dir = dir
 
@@ -30,6 +20,5 @@ class Loader(object):
         module_spec.loader.exec_module(module)
 
         schema = module.Schema()
-        schema.uid = self.generate_uid()
         return schema
 
