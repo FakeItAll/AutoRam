@@ -81,8 +81,6 @@ class MainWindow(object):
         rect_coords.append(rect_coords[0] + width)
         rect_coords.append(rect_coords[1] + height)
 
-        # self.canvas.create_rectangle(*rect_coords)
-
         in_id, out_id = {}, {}
 
         shift = height // (in_count + 1)
