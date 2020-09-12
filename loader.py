@@ -9,7 +9,6 @@ class Loader(object):
 
     def load_schema(self, name):
         if self.modules.get(name):
-            print(self.modules[name])
             return self.modules[name].Schema()
 
         if self.dir:
