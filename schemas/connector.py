@@ -1,5 +1,9 @@
 class Connector(object):
     def __init__(self):
+        self.schemas_to = {  # example
+            'schuid-1': {'OUT1': 'IN1', 'OUT2': 'IN2'},
+            'schuid-2': {'OUT3': 'IN1', 'OUT4': 'IN2'},
+        }
         self.schemas_to = {}
 
     def add(self, schema_to, connections):

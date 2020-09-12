@@ -43,19 +43,19 @@ class MainWindow(object):
                                 text=schema.code, justify=self.consts['center'], font='Arial 14')
 
         shift = height // (in_count + 1)
+        from_x = rect_coords[0] - self.consts['arrow_length']
+        to_x = rect_coords[0]
         for i in range(in_count):
             cur_y = rect_coords[1] + shift * (i + 1)
-            from_x = rect_coords[0] - self.consts['arrow_length']
-            to_x = rect_coords[0]
             self.canvas.create_line(from_x, cur_y, to_x, cur_y, arrow=self.consts['last'])
             self.canvas.create_text(to_x + 4 * len(in_names[i]), cur_y,
                                     text=in_names[i], justify=self.consts['center'], font='Arial 8')
 
         shift = height // (out_count + 1)
+        from_x = rect_coords[2]
+        to_x = rect_coords[2] + self.consts['arrow_length']
         for i in range(out_count):
             cur_y = rect_coords[1] + shift * (i + 1)
-            from_x = rect_coords[2]
-            to_x = rect_coords[2] + self.consts['arrow_length']
             self.canvas.create_line(from_x, cur_y, to_x, cur_y, arrow=self.consts['last'])
             self.canvas.create_text(from_x - 4 * len(out_names[i]), cur_y,
                                     text=out_names[i], justify=self.consts['center'], font='Arial 8')
@@ -75,7 +75,7 @@ class MainWindow(object):
         rect_coords.append(rect_coords[0] + width)
         rect_coords.append(rect_coords[1] + height)
 
-        self.canvas.create_rectangle(*rect_coords)
+        # self.canvas.create_rectangle(*rect_coords)
 
         shift = height // (in_count + 1)
         from_x = rect_coords[0] - self.consts['arrow_length']
@@ -92,12 +92,17 @@ class MainWindow(object):
         to_y2 = rect_coords[1] + height // (in_count + 1)
         for i in range(out_count):
             cur_x = rect_coords[0] + shift * (i + 1)
-            self.canvas.create_line(cur_x, from_y, cur_x, to_y, arrow=self.consts['last'])
-            self.canvas.create_line(cur_x, from_y, cur_x, to_y2)
+            self.canvas.create_line(cur_x, from_y+1, cur_x, to_y, arrow=self.consts['last'])
+            self.canvas.create_line(cur_x, from_y-1, cur_x, to_y2)
 
-        x0 = rect_coords[0] + height // (in_count + 1)*2
-        y0 = rect_coords[1] + width // (out_count + 1)*2
-        self.canvas.create_oval(x0-3, y0-3, x0+3, y0+3, fill='blue')
+        for key_y in matrix.matrix.keys():
+            y_n = in_names.index(key_y) + 1
+            y0 = rect_coords[1] + width // (out_count + 1) * y_n
+            for key_x in matrix.matrix[key_y]:
+                x_n = out_names.index(key_x) + 1
+                x0 = rect_coords[0] + height // (in_count + 1) * x_n
+                self.canvas.create_oval(x0-3, y0-3, x0+3, y0+3, fill='blue')
+
 
     def execute(self):
         self.root.mainloop()

@@ -25,11 +25,11 @@ def main():
 
     mw = MainWindow()
     mw.draw_schema(mod1, [50, 50])
-    mw.draw_schema(mod2, [200, 50])
+    mw.draw_schema(mod2, [500, 50])
     mw.draw_schema(mod3, [350, 50])
-    mw.draw_matrix(mod4, [500, 50])
+    mw.draw_matrix(mod4, [160, 50])
     mw.execute()
 
-"Тест"
+
 if __name__ == '__main__':
     main()
