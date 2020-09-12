@@ -4,7 +4,7 @@ from mainwindow import MainWindow
 
 
 def main():
-    loader = Loader()
+    loader = Loader('schemas/')
     cm = CollectManager()
 
     mod1 = loader.load_schema('decryptor')
