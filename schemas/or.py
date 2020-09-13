@@ -8,11 +8,11 @@ class Schema(BaseSchema):
         self.code = 'OR'
         self.io_settings = {
             'names': [
-                ['I1', 'I2'],
-                ['RES']
+                ['X1', 'X2'],
+                ['Y']
             ]
         }
         self.post_init()
 
     def f(self):
-        self.outs['RES'] = int(self.ins['I1'] or self.ins['I2'])
+        self.outs['Y'] = int(self.ins['X1'] or self.ins['X2'])

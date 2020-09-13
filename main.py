@@ -4,30 +4,51 @@ from mainwindow import MainWindow
 
 
 def main():
-    loader = Loader('schemas/')
+    L = Loader('schemas/')
     cm = CollectManager()
 
-    mod1 = loader.load_schema('decryptor')
-    mod2 = loader.load_schema('multiplexer')
-    mod3 = loader.load_schema('and')
-    mat1 = loader.load_schema('storage_matrix')
+    decryptor = L.load_schema('decryptor')
+    matrix = L.load_schema('storage_matrix')
+    multiplexer = L.load_schema('multiplexer')
+    and1 = L.load_schema('and')
+    and2 = L.load_schema('and')
 
-    mod1.connector.add(mod2, {'Y0': 'X0', 'Y1': 'A2', 'Y2': 'X7'})
-    mod2.connector.add(mod3, {'Y': 'I1', 'Y': 'I2'})
+    decryptor.connector.add(matrix,
+                            {'Y0': 'Y0',
+                             'Y1': 'Y1',
+                             'Y2': 'Y2',
+                             'Y3': 'Y3',
+                             'Y4': 'Y4',
+                             'Y5': 'Y5',
+                             'Y6': 'Y6',
+                             'Y7': 'Y7'})
+    matrix.connector.add(multiplexer,
+                         {'X0': 'X0',
+                          'X1': 'X1',
+                          'X2': 'X2',
+                          'X3': 'X3',
+                          'X4': 'X4',
+                          'X5': 'X5',
+                          'X6': 'X6',
+                          'X7': 'X7'})
+    multiplexer.connector.add(and2, {'Y': 'X1'})
+    and1.connector.add(and2, {'Y': 'X2'})
 
-    cm.add(mod1)
-    cm.add(mod2)
-    cm.add(mod3)
-    cm.add(mat1)
+    cm.add(decryptor)
+    cm.add(matrix)
+    cm.add(multiplexer)
+    cm.add(and1)
+    cm.add(and2)
 
-    ins = {'A1': 1, 'A2': 0, 'A3': 0}
-    cm.execute(mod1, ins, True)
+    ins = {'A0': 1, 'A1': 0, 'A2': 0}
+    cm.execute(decryptor, ins, True)
 
     mw = MainWindow()
-    mw.draw_schema(mod1, [50, 50])
-    mw.draw_schema(mod2, [220, 50])
-    mw.draw_schema(mod3, [360, 50])
-    mw.draw_matrix(mat1, [500, 50])
+    mw.draw_schema(decryptor, [50, 50])
+    mw.draw_matrix(matrix, [200, 50])
+    mw.draw_schema(multiplexer, [360, 250])
+    mw.draw_schema(and1, [360, 460])
+    mw.draw_schema(and2, [520, 420])
     mw.draw_connections()
     mw.execute()
 

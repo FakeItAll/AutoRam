@@ -1,28 +1,27 @@
-import tkinter as tk
+import graphic_shell
 import random
 
 
 class MainWindow(object):
     def __init__(self):
-        root = tk.Tk()
-        root.title('AutoRAM')
-        root.geometry('1200x400+100+100')
-        # root.state('zoomed')
-        self.root = root
+        self.gs = graphic_shell.GraphicShell()
+        self.title = 'AutoRAM'
+        self.geometry = [100, 100, 1200, 600]
+        self.gs.window = {
+            'title': self.title,
+            'geometry': self.geometry,
+        }
 
-        root.update_idletasks()
-        width = root.winfo_width()
-        height = root.winfo_height()
+        width = self.geometry[2] * 2 // 3
+        height = self.geometry[3] - 10
+        self.canvas_geometry = [0, 0, width, height]  # x, y not works
+        self.canvas_color = 'lightgrey'
+        self.gs.canvas = {
+            'geometry': self.canvas_geometry,
+            'bg_color': self.canvas_color,
+        }
 
-        canvas_width = width - width // 3
-        canvas_height = height - 10
-        canvas = tk.Canvas(self.root,
-                           width=canvas_width, height=canvas_height, bg='lightgrey')
-        canvas.pack(side='left')
-        self.canvas = canvas
-
-        self.consts = {'center': tk.CENTER, 'first': tk.FIRST, 'last': tk.LAST, 'arrow_length': 20}
-
+        self.consts = self.gs.consts
         self.schemas = {}
 
     def draw_schema(self, schema, rect_coords=[]):
@@ -38,23 +37,21 @@ class MainWindow(object):
         rect_coords.append(rect_coords[0] + width)
         rect_coords.append(rect_coords[1] + height)
 
-        self.canvas.create_rectangle(*rect_coords)
+        self.gs.rect(rect_coords)
 
         in_id, out_id = {}, {}
 
         rect_center_x = rect_coords[0] + width // 2
         rect_center_y = rect_coords[1] + height // 2
-        self.canvas.create_text(rect_center_x, rect_center_y,
-                                text=schema.code, justify=self.consts['center'], font='Arial 14')
+        self.gs.text_lg([rect_center_x, rect_center_y], schema.code)
 
         shift = height // (in_count + 1)
         from_x = rect_coords[0] - self.consts['arrow_length']
         to_x = rect_coords[0]
         for i in range(in_count):
             cur_y = rect_coords[1] + shift * (i + 1)
-            self.canvas.create_line(from_x, cur_y, to_x, cur_y, arrow=self.consts['last'])
-            self.canvas.create_text(to_x + 4 * len(in_names[i]), cur_y,
-                                    text=in_names[i], justify=self.consts['center'], font='Arial 8')
+            self.gs.arrow([from_x, cur_y, to_x, cur_y])
+            self.gs.text_sm([to_x + 4 * len(in_names[i]), cur_y], in_names[i])
             in_id[in_names[i]] = [from_x, cur_y]
 
         shift = height // (out_count + 1)
@@ -62,9 +59,9 @@ class MainWindow(object):
         to_x = rect_coords[2] + self.consts['arrow_length']
         for i in range(out_count):
             cur_y = rect_coords[1] + shift * (i + 1)
-            self.canvas.create_line(from_x, cur_y, to_x, cur_y, arrow=self.consts['last'])
-            self.canvas.create_text(from_x - 4 * len(out_names[i]), cur_y,
-                                    text=out_names[i], justify=self.consts['center'], font='Arial 8')
+            self.gs.arrow([from_x, cur_y, to_x, cur_y])
+            self.gs.text_sm([from_x - 4 * len(out_names[i]), cur_y], out_names[i])
+
             out_id[out_names[i]] = [to_x, cur_y]
 
         self.schemas[schema.uid] = {'obj': schema, 'names': [in_id, out_id]}
@@ -89,8 +86,9 @@ class MainWindow(object):
         from_x2 = rect_coords[2] - width // (out_count + 1)
         for i in range(in_count):
             cur_y = rect_coords[1] + shift * (i + 1)
-            self.canvas.create_line(from_x, cur_y, to_x, cur_y, arrow=self.consts['last'])
-            self.canvas.create_line(from_x2, cur_y, to_x, cur_y)
+            self.gs.arrow([from_x, cur_y, to_x, cur_y])
+            self.gs.line([from_x2, cur_y, to_x, cur_y])
+
             in_id[in_names[i]] = [from_x, cur_y]
 
         shift = width // (out_count + 1)
@@ -99,8 +97,8 @@ class MainWindow(object):
         to_y2 = rect_coords[1] + height // (in_count + 1)
         for i in range(out_count):
             cur_x = rect_coords[0] + shift * (i + 1)
-            self.canvas.create_line(cur_x, from_y+1, cur_x, to_y, arrow=self.consts['last'])
-            self.canvas.create_line(cur_x, from_y-1, cur_x, to_y2)
+            self.gs.arrow([cur_x, from_y + 1, cur_x, to_y])
+            self.gs.line([cur_x, from_y - 1, cur_x, to_y2])
             out_id[out_names[i]] = [cur_x, to_y]
 
         self.schemas[matrix.uid] = {'obj': matrix, 'names': [in_id, out_id]}
@@ -111,7 +109,7 @@ class MainWindow(object):
             for key_x in matrix.matrix[key_y]:
                 x_n = out_names.index(key_x) + 1
                 x0 = rect_coords[0] + height // (in_count + 1) * x_n
-                self.canvas.create_oval(x0-3, y0-3, x0+3, y0+3, fill='blue')
+                self.gs.oval([x0 - 3, y0 - 3, x0 + 3, y0 + 3], 'blue')
 
         return matrix.uid
 
@@ -124,11 +122,11 @@ class MainWindow(object):
                 for c_out, c_in in connections.items():
                     pos_out = schema_i['names'][1][c_out]
                     pos_in = schema_to_i['names'][0][c_in]
-                    diff = abs(pos_in[0] - pos_out[0]) * 0.1
+                    diff = round(abs(pos_in[0] - pos_out[0]) * 0.1)
                     pos_x = random.randint(min(pos_in[0], pos_out[0]) + diff, max((pos_in[0], pos_out[0])) - diff)
-                    self.canvas.create_line(pos_out, pos_x, pos_out[1], fill='red')
-                    self.canvas.create_line(pos_x, pos_out[1], pos_x, pos_in[1], fill='red')
-                    self.canvas.create_line(pos_x, pos_in[1], pos_in, fill='red')
+                    self.gs.line([pos_out, pos_x, pos_out[1]], 'red')
+                    self.gs.line([pos_x, pos_out[1], pos_x, pos_in[1]], 'red')
+                    self.gs.line([pos_x, pos_in[1], pos_in], 'red')
 
     def execute(self):
-        self.root.mainloop()
+        self.gs.execute()

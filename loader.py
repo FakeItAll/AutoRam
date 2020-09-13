@@ -5,14 +5,13 @@ class Loader(object):
     def __init__(self, dir=''):
         self.dir = dir
         self.modules = {}
-        self.extension = '.py'
 
     def load_schema(self, name):
         if self.modules.get(name):
             return self.modules[name].Schema()
 
         if self.dir:
-            path = self.dir + name + self.extension
+            path = self.dir + name + '.py'
             module_spec = imp_util.spec_from_file_location(name, path)
         else:
             module_spec = imp_util.find_spec(name)
