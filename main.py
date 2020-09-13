@@ -40,7 +40,8 @@ def main():
     cm.add(and1)
     cm.add(and2)
 
-    cm.set_ins(decryptor, {'A0': 1, 'A1': 0, 'A2': 0})
+    cm.set_ins(decryptor, {'A0': 1, 'A1': 1, 'A2': 1})
+    cm.set_ins(multiplexer, {'A0': 0, 'A1': 1, 'A2': 1})
     cm.set_ins(and1, {'X1': 1, 'X2': 1})
     cm.execute(decryptor, True)
 

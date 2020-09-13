@@ -50,6 +50,15 @@ class CollectManager(object):
         self.in_connects.pop(schema.uid, None)
         return schema.uid
 
+    def init(self):
+        self.visited = {uid: False for uid in self.visited.keys()}
+        # set in_collects
+        for uid in self.in_connects.keys():
+            self.in_connects[uid] = []
+        for schema_from in self.collect.values():
+            for schema_to_uid in schema_from.connector.schema_binds():
+                self.in_connects[schema_to_uid].append(schema_from.uid)
+
     def step(self, schema_cur, logs=False, back=False):
         if not self.collect.get(schema_cur.uid):
             return
@@ -59,7 +68,7 @@ class CollectManager(object):
                 self.step(self.collect[schema_from_uid], logs, True)
 
         self.visited[schema_cur.uid] = True
-        schema_cur.ins = self.ins[schema_cur.uid]
+        schema_cur.ins = self.ins.get(schema_cur.uid) or schema_cur.ins
         schema_cur.f()
         outs = schema_cur.outs
 
@@ -82,15 +91,6 @@ class CollectManager(object):
                     self.log(2, schema_cur.uid, schema_to_uid, connector.raw(schema_to_uid))
                 if not back:
                     self.step(self.collect[schema_to_uid], logs, False)
-
-    def init(self):
-        self.visited = {uid: False for uid in self.visited.keys()}
-        # set in_collects
-        for uid in self.in_connects.keys():
-            self.in_connects[uid] = []
-        for schema_from in self.collect.values():
-            for schema_to_uid in schema_from.connector.schema_binds():
-                self.in_connects[schema_to_uid].append(schema_from.uid)
 
     def execute(self, start_schema, logs=False, back=False):
         self.init()

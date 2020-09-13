@@ -1,7 +1,7 @@
 import tkinter as tk
 
 
-class GraphicShell(object):
+class GraphicShellTk(object):
     def __init__(self):
         self._window = tk.Tk()
         self.root = self._window
