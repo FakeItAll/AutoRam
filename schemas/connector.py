@@ -7,7 +7,6 @@ class Connector(object):
         self.schemas_to = {}
 
     def add(self, schema_to, connections):
-        connections = connections or {'OUT1': 'IN1', 'OUT2': 'IN2'}  # example
         if self.schemas_to.get(schema_to.uid):
             self.schemas_to[schema_to.uid].update(connections)
         else:

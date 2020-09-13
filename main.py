@@ -40,8 +40,9 @@ def main():
     cm.add(and1)
     cm.add(and2)
 
-    ins = {'A0': 1, 'A1': 0, 'A2': 0}
-    cm.execute(decryptor, ins, True)
+    cm.set_ins(decryptor, {'A0': 1, 'A1': 0, 'A2': 0})
+    cm.set_ins(and1, {'X1': 1, 'X2': 1})
+    cm.execute(decryptor, True)
 
     mw = MainWindow()
     mw.draw_schema(decryptor, [50, 50])

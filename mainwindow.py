@@ -1,13 +1,13 @@
-import graphic_shell
+from graphic_shell import GraphicShell
 import random
 
 
 class MainWindow(object):
     def __init__(self):
-        self.gs = graphic_shell.GraphicShell()
+        self.graphic = GraphicShell()
         self.title = 'AutoRAM'
         self.geometry = [100, 100, 1200, 600]
-        self.gs.window = {
+        self.graphic.window = {
             'title': self.title,
             'geometry': self.geometry,
         }
@@ -16,12 +16,12 @@ class MainWindow(object):
         height = self.geometry[3] - 10
         self.canvas_geometry = [0, 0, width, height]  # x, y not works
         self.canvas_color = 'lightgrey'
-        self.gs.canvas = {
+        self.graphic.canvas = {
             'geometry': self.canvas_geometry,
             'bg_color': self.canvas_color,
         }
 
-        self.consts = self.gs.consts
+        self.consts = self.graphic.consts
         self.schemas = {}
 
     def draw_schema(self, schema, rect_coords=[]):
@@ -37,21 +37,21 @@ class MainWindow(object):
         rect_coords.append(rect_coords[0] + width)
         rect_coords.append(rect_coords[1] + height)
 
-        self.gs.rect(rect_coords)
+        self.graphic.rect(rect_coords)
 
         in_id, out_id = {}, {}
 
         rect_center_x = rect_coords[0] + width // 2
         rect_center_y = rect_coords[1] + height // 2
-        self.gs.text_lg([rect_center_x, rect_center_y], schema.code)
+        self.graphic.text_lg([rect_center_x, rect_center_y], schema.code)
 
         shift = height // (in_count + 1)
         from_x = rect_coords[0] - self.consts['arrow_length']
         to_x = rect_coords[0]
         for i in range(in_count):
             cur_y = rect_coords[1] + shift * (i + 1)
-            self.gs.arrow([from_x, cur_y, to_x, cur_y])
-            self.gs.text_sm([to_x + 4 * len(in_names[i]), cur_y], in_names[i])
+            self.graphic.arrow([from_x, cur_y, to_x, cur_y])
+            self.graphic.text_sm([to_x + 4 * len(in_names[i]), cur_y], in_names[i])
             in_id[in_names[i]] = [from_x, cur_y]
 
         shift = height // (out_count + 1)
@@ -59,8 +59,8 @@ class MainWindow(object):
         to_x = rect_coords[2] + self.consts['arrow_length']
         for i in range(out_count):
             cur_y = rect_coords[1] + shift * (i + 1)
-            self.gs.arrow([from_x, cur_y, to_x, cur_y])
-            self.gs.text_sm([from_x - 4 * len(out_names[i]), cur_y], out_names[i])
+            self.graphic.arrow([from_x, cur_y, to_x, cur_y])
+            self.graphic.text_sm([from_x - 4 * len(out_names[i]), cur_y], out_names[i])
 
             out_id[out_names[i]] = [to_x, cur_y]
 
@@ -86,8 +86,8 @@ class MainWindow(object):
         from_x2 = rect_coords[2] - width // (out_count + 1)
         for i in range(in_count):
             cur_y = rect_coords[1] + shift * (i + 1)
-            self.gs.arrow([from_x, cur_y, to_x, cur_y])
-            self.gs.line([from_x2, cur_y, to_x, cur_y])
+            self.graphic.arrow([from_x, cur_y, to_x, cur_y])
+            self.graphic.line([from_x2, cur_y, to_x, cur_y])
 
             in_id[in_names[i]] = [from_x, cur_y]
 
@@ -97,8 +97,8 @@ class MainWindow(object):
         to_y2 = rect_coords[1] + height // (in_count + 1)
         for i in range(out_count):
             cur_x = rect_coords[0] + shift * (i + 1)
-            self.gs.arrow([cur_x, from_y + 1, cur_x, to_y])
-            self.gs.line([cur_x, from_y - 1, cur_x, to_y2])
+            self.graphic.arrow([cur_x, from_y + 1, cur_x, to_y])
+            self.graphic.line([cur_x, from_y - 1, cur_x, to_y2])
             out_id[out_names[i]] = [cur_x, to_y]
 
         self.schemas[matrix.uid] = {'obj': matrix, 'names': [in_id, out_id]}
@@ -109,7 +109,7 @@ class MainWindow(object):
             for key_x in matrix.matrix[key_y]:
                 x_n = out_names.index(key_x) + 1
                 x0 = rect_coords[0] + height // (in_count + 1) * x_n
-                self.gs.oval([x0 - 3, y0 - 3, x0 + 3, y0 + 3], 'blue')
+                self.graphic.oval([x0 - 3, y0 - 3, x0 + 3, y0 + 3], 'blue')
 
         return matrix.uid
 
@@ -124,9 +124,9 @@ class MainWindow(object):
                     pos_in = schema_to_i['names'][0][c_in]
                     diff = round(abs(pos_in[0] - pos_out[0]) * 0.1)
                     pos_x = random.randint(min(pos_in[0], pos_out[0]) + diff, max((pos_in[0], pos_out[0])) - diff)
-                    self.gs.line([pos_out, pos_x, pos_out[1]], 'red')
-                    self.gs.line([pos_x, pos_out[1], pos_x, pos_in[1]], 'red')
-                    self.gs.line([pos_x, pos_in[1], pos_in], 'red')
+                    self.graphic.line([pos_out, pos_x, pos_out[1]], 'red')
+                    self.graphic.line([pos_x, pos_out[1], pos_x, pos_in[1]], 'red')
+                    self.graphic.line([pos_x, pos_in[1], pos_in], 'red')
 
     def execute(self):
-        self.gs.execute()
+        self.graphic.execute()
