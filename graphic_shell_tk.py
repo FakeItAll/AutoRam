@@ -12,7 +12,6 @@ class GraphicShellTk(object):
             'last': tk.LAST,
             'font_lg': 'Arial 14',
             'font_sm': 'Arial 8',
-            'arrow_length': 15
         }
 
     def execute(self):

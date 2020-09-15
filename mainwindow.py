@@ -21,7 +21,11 @@ class MainWindow(object):
             'bg_color': self.canvas_color,
         }
 
-        self.consts = self.gui.consts
+        self.consts = {
+            'arrow_length': 15,
+            'schema_length': 90,
+            'pins_spacing': 15,
+        }
         self.schemas = {}
 
     def draw_schema(self, schema, rect_coords=[]):
@@ -31,8 +35,8 @@ class MainWindow(object):
         else:
             in_count, out_count = schema.io_settings['count']
 
-        width = 90
-        height = max(in_count, out_count) * 18
+        width = self.consts['schema_length']
+        height = max(in_count, out_count) * self.consts['pins_spacing']
 
         rect_coords.append(rect_coords[0] + width)
         rect_coords.append(rect_coords[1] + height)
@@ -72,8 +76,8 @@ class MainWindow(object):
         in_names, out_names = matrix.io_settings['names']
         in_count, out_count = len(in_names), len(out_names)
 
-        width = out_count * 18
-        height = in_count * 18
+        width = out_count * self.consts['pins_spacing']
+        height = in_count * self.consts['pins_spacing']
 
         rect_coords.append(rect_coords[0] + width)
         rect_coords.append(rect_coords[1] + height)
