@@ -27,6 +27,12 @@ class CollectManager(object):
         self.ins = {}
         self.in_connects = {}
 
+    def items(self):
+        return self.collect.items()
+
+    def get(self, uid):
+        return self.collect.get(uid)
+
     def add(self, schema):
         self.collect.update({schema.uid: schema})
         self.visited.update({schema.uid: False})

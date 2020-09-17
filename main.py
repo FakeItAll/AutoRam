@@ -45,13 +45,13 @@ def main():
     cm.set_ins(and1, {'X1': 1, 'X2': 1})
     cm.execute(decryptor, True)
 
-    mw = MainWindow()
-    mw.draw_schema(decryptor, [50, 50])
-    mw.draw_matrix(matrix, [200, 50])
-    mw.draw_schema(multiplexer, [360, 250])
-    mw.draw_schema(and1, [360, 460])
-    mw.draw_schema(and2, [520, 420])
-    mw.draw_connections()
+    mw = MainWindow(cm)
+    mw.canvas.schema(decryptor, [50, 50])
+    # mw.draw_matrix(matrix, [200, 50])
+    mw.canvas.schema(multiplexer, [360, 250])
+    mw.canvas.schema(and1, [360, 460])
+    mw.canvas.schema(and2, [520, 420])
+    # mw.draw_connections()
     mw.execute()
 
 

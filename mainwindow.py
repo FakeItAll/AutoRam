@@ -1,26 +1,31 @@
-from graphic_shell_tk import GraphicShellTk
+import tkinter as tk
+from canvas import Canvas
+from pinstable import PinsTable
+from eventmixin import EventMixin
 import random
 
 
-class MainWindow(object):
-    def __init__(self):
-        self.gui = GraphicShellTk()
-        self.title = 'AutoRAM'
-        self.geometry = [100, 100, 1200, 600]
-        self.gui.window = {
-            'title': self.title,
-            'geometry': self.geometry,
-        }
+class MainWindow(EventMixin, tk.Tk):
+    def __init__(self, collect_manager={}):
+        super().__init__()
+        self.title('AutoRAM')
 
-        width = self.geometry[2] * 2 // 3
-        height = self.geometry[3] - 10
-        self.canvas_geometry = [0, 0, width, height]  # x, y not works
-        self.canvas_color = '#dbf'
-        self.gui.canvas = {
-            'geometry': self.canvas_geometry,
-            'bg_color': self.canvas_color,
-        }
+        self.init_width = 1200
+        self.init_height = 600
+        self.geometry([self.init_width, self.init_height, 100, 100])
 
+        canvas_width = self.init_width * 2 // 3
+        canvas_color = '#DBF'
+        self.canvas = Canvas(self, canvas_width, canvas_color)
+        self.canvas.pack(side='left', fill=tk.Y)
+
+        self.pinstable = PinsTable(self, self.init_width - canvas_width)
+        self.pinstable.pack(side='left', fill=tk.Y)
+
+        self.collect_manager = collect_manager
+        self.listen('OnSelect', self.select_handler)
+        self.listen('OnUnSelect', self.unselect_handler)
+        # ----
         self.consts = {
             'arrow_length': 15,
             'schema_length': 90,
@@ -28,7 +33,18 @@ class MainWindow(object):
         }
         self.schemas = {}
 
-    def draw_schema(self, schema, rect_coords=[]):
+    def select_handler(self, uid):
+        schema = self.collect_manager.get(uid)
+        print(uid)
+        self.pinstable.set(schema.name, schema.ins, schema.outs)
+
+    def unselect_handler(self, e):
+        self.pinstable.clear()
+
+    def geometry(self, params):
+        super().geometry('{}x{}+{}+{}'.format(*params))
+
+    def draw_schema(self, schema, rect_coords):
         if schema.io_settings.get('names'):
             in_names, out_names = schema.io_settings['names']
             in_count, out_count = len(in_names), len(out_names)
@@ -133,4 +149,4 @@ class MainWindow(object):
                     self.gui.line([pos_x, pos_in[1], pos_in], 'red')
 
     def execute(self):
-        self.gui.execute()
+        self.mainloop()
