@@ -12,7 +12,7 @@ class Schema(BaseSchema):
                 ['Y0', 'Y1', 'Y2', 'Y3', 'Y4', 'Y5', 'Y6', 'Y7'],
             ]
         }
-        self.post_init()
+        self.set_default_values()
 
     def f(self):
         self.outs['Y0'] = int(not self.ins['A0'] and not self.ins['A1'] and not self.ins['A2'])

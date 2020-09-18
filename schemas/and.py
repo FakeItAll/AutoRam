@@ -12,7 +12,7 @@ class Schema(BaseSchema):
                 ['Y']
             ]
         }
-        self.post_init()
+        self.set_default_values()
 
     def f(self):
         self.outs['Y'] = int(self.ins['X1'] and self.ins['X2'])

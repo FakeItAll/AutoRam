@@ -2,10 +2,11 @@ from eventmixin import EventMixin
 
 
 class SchemaUI(EventMixin):
-    def __init__(self, parent, schema, coords):
+    def __init__(self, parent, schema, coords, direction):
         self.parent = parent
         self.schema = schema
         self.uid = schema.uid
+        self.direction = direction % 4
         self.selected = False
 
         self.arrow_length = 15
@@ -13,14 +14,24 @@ class SchemaUI(EventMixin):
         self.pins_spacing = 15
 
         self.default_color = '#DDD'
-        self.active_color = '#F00'
+        self.active_color = '#F88'
 
-        cuids = self.draw(coords)
-        self.rect_cuid = cuids[0]
-        for cuid in cuids:
+        self.cuids = []
+
+        self.rect_coords = coords
+        self.in_coords = []
+        self.out_coords = []
+
+        self.in_direction = direction
+        self.out_direction = direction
+
+    def bind(self):
+        self.rect_cuid = self.cuids[0]
+        for cuid in self.cuids:
             self.click_listen_tag(cuid, self.click_handler)
 
-    def draw(self, rect_coords):
+    def draw(self):
+        rect_coords = self.rect_coords
         cuids = []
         if self.schema.io_settings.get('names'):
             in_names, out_names = self.schema.io_settings['names']
@@ -61,9 +72,13 @@ class SchemaUI(EventMixin):
 
             out_id[out_names[i]] = [to_x, cur_y]
 
-        # self.schemas[self.schema.uid] = {'obj': self.schema, 'names': [in_id, out_id]}
+        self.in_coords = in_id
+        self.out_coords = out_id
 
-        return self.parent.cuids_dump()
+        self.cuids = self.parent.cuids_dump()
+        self.bind()
+
+        return self.schema.uid
 
     def click_handler(self, e):
         self.select()

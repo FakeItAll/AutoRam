@@ -18,7 +18,7 @@ class Schema(BaseSchema):
             'Y6': ['X4', 'X5', 'X6'],
             'Y7': ['X1', 'X2', 'X3'],
         }
-        self.post_init()
+        self.set_default_values()
 
     def f(self):
         for row, cols in self.matrix.items():

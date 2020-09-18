@@ -27,7 +27,7 @@ class BaseSchema(object):
         self.connector = Connector()
         self.uid = self.generate_uid()
 
-    def post_init(self):
+    def set_default_values(self):
         if self.io_settings.get('names'):
             keys = self.io_settings['names'][0]
             self._ins = {k: 0 for k in keys}

@@ -5,7 +5,6 @@ from mainwindow import MainWindow
 
 def main():
     L = Loader('schemas/')
-    cm = CollectManager()
 
     decryptor = L.load_schema('decryptor')
     matrix = L.load_schema('storage_matrix')
@@ -34,24 +33,26 @@ def main():
     multiplexer.connector.add(and2, {'Y': 'X1'})
     and1.connector.add(and2, {'Y': 'X2'})
 
-    cm.add(decryptor)
+    cm = CollectManager(decryptor)
     cm.add(matrix)
     cm.add(multiplexer)
     cm.add(and1)
     cm.add(and2)
 
-    cm.set_ins(decryptor, {'A0': 1, 'A1': 1, 'A2': 1})
-    cm.set_ins(multiplexer, {'A0': 0, 'A1': 1, 'A2': 1})
-    cm.set_ins(and1, {'X1': 1, 'X2': 1})
-    cm.execute(decryptor, True)
+    # cm.set_base_ins(decryptor, {'A0': 1, 'A1': 1, 'A2': 1})
+    # cm.set_base_ins(multiplexer, {'A0': 0, 'A1': 1, 'A2': 0})
+    # cm.set_base_ins(and1, {'X1': 1, 'X2': 1})
+    cm.set_base_schema(decryptor)
 
     mw = MainWindow(cm)
-    mw.canvas.schema(decryptor, [50, 50])
-    # mw.draw_matrix(matrix, [200, 50])
-    mw.canvas.schema(multiplexer, [360, 250])
-    mw.canvas.schema(and1, [360, 460])
-    mw.canvas.schema(and2, [520, 420])
-    # mw.draw_connections()
+    mw.canvas.schema(decryptor, [50, 50]).draw()
+    mw.canvas.matrix(matrix, [200, 50]).draw()
+    mw.canvas.schema(multiplexer, [360, 250]).draw()
+    mw.canvas.schema(and1, [360, 460]).draw()
+    mw.canvas.schema(and2, [520, 420]).draw()
+    cons = mw.canvas.connections()
+    for con in cons:
+        con.draw()
     mw.execute()
 
 
