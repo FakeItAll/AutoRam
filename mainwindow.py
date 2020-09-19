@@ -11,7 +11,7 @@ class MainWindow(EventMixin, tk.Tk):
         super().__init__()
         self.title('AutoRAM')
 
-        self.init_width = 1200
+        self.init_width = 1100
         self.init_height = 600
         self.geometry([self.init_width, self.init_height, 100, 100])
 
@@ -21,7 +21,7 @@ class MainWindow(EventMixin, tk.Tk):
         self.canvas.pack(side='left', fill=tk.Y)
 
         self.execute_panel = ExecutePanel(self, self.init_width - canvas_width, 100)
-        self.execute_panel.pack(side='top', ipadx=5, ipady=10, pady=5)
+        self.execute_panel.pack(side='top', pady=5)
 
         self.pinstable = PinsTable(self, self.init_width - canvas_width)
 
@@ -44,7 +44,7 @@ class MainWindow(EventMixin, tk.Tk):
 
     def select_handler(self, uid):
         self.selected_uid = uid
-        self.pinstable.pack(side='top', ipadx=5, ipady=10, pady=5)
+        self.pinstable.pack(side='top', pady=5)
         self.pinstable.set(*self.get_selected_data())
 
     def unselect_handler(self, e):

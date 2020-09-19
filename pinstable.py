@@ -4,7 +4,7 @@ from pinedit import PinEdit
 
 class PinsTable(tk.LabelFrame):
     def __init__(self, parent, width):
-        super().__init__(parent, width=width)
+        super().__init__(parent, width=width, padx=34, pady=10)
         self.collect = []
         self.parent = parent
 

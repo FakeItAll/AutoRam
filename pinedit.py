@@ -36,13 +36,13 @@ class PinEdit(EventMixin, tk.Spinbox):
 
     def set(self, val):
         self.val.set(val)
-        if val == 0:
+        if int(val) == 0:
             self.set_font()
         else:
             self.set_font(False)
 
     def get(self):
-        return self.val.get()
+        return int(self.val.get())
 
     def set_font(self, normal=True):
         if normal:
