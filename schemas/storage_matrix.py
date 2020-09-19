@@ -5,7 +5,7 @@ class Schema(BaseSchema):
     def __init__(self):
         super().__init__()
         self.name = 'Storage Matrix'
-        self.code = ''
+        self.code = 'S_MATRIX'
         self.io_settings = {
             'names': [
                 ['Y0', 'Y1', 'Y2', 'Y3', 'Y4', 'Y5', 'Y6', 'Y7'],

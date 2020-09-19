@@ -26,6 +26,7 @@ class MainWindow(EventMixin, tk.Tk):
         self.pinstable = PinsTable(self, self.init_width - canvas_width)
 
         self.collect_manager = collect_manager
+        self.selected_uid = ''
 
         self.listen('OnSelect', self.select_handler)
         self.listen('OnUnSelect', self.unselect_handler)
@@ -33,29 +34,38 @@ class MainWindow(EventMixin, tk.Tk):
         self.listen('OnClear', self.clear_handler)
         self.listen('OnChange', self.change_handler)
 
+        self.logs = True
+
+    def get_selected_data(self):
+        schema = self.collect_manager.get(self.selected_uid)
+        ins = self.collect_manager.get_ins(schema)
+        outs = self.collect_manager.get_outs(schema)
+        return [ins, outs, schema.name]
+
     def select_handler(self, uid):
-        schema = self.collect_manager.get(uid)
+        self.selected_uid = uid
         self.pinstable.pack(side='top', ipadx=5, ipady=10, pady=5)
-        self.pinstable.set(schema)
+        self.pinstable.set(*self.get_selected_data())
 
     def unselect_handler(self, e):
         self.pinstable.pack_forget()
         self.pinstable.clear()
+        self.selected_uid = ''
 
     def run_handler(self, e):
-        self.collect_manager.execute()
-        self.pinstable.refresh()
+        self.collect_manager.execute(self.logs)
+        if self.selected_uid:
+            self.pinstable.refresh(*self.get_selected_data())
 
     def clear_handler(self, e):
         self.collect_manager.clear()
-        self.pinstable.refresh()
+        if self.selected_uid:
+            self.pinstable.refresh(*self.get_selected_data())
 
     def change_handler(self, e):
-        print('change')
-        e = self.serialize(e)
-        print(e)
-        schema = self.pinstable.selected_schema
-        pin, val = e
+        pin_val = self.serialize(e)
+        schema = self.collect_manager.get(self.selected_uid)
+        pin, val = pin_val
         self.collect_manager.set_base_ins(schema, {pin: val})
 
     def geometry(self, params):

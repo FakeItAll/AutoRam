@@ -86,12 +86,10 @@ class SchemaUI(EventMixin):
 
     def select(self):
         if not self.selected:
-            print('select ' + str(self.uid))
             self.parent.change_color(self.rect_cuid, self.active_color)
             self.selected = True
 
     def unselect(self):
         if self.selected:
-            print('unselect ' + str(self.uid))
             self.parent.change_color(self.rect_cuid, self.default_color)
             self.selected = False

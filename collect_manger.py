@@ -59,7 +59,14 @@ class CollectManager(object):
             self.base_ins.update({schema.uid: ins})
 
     def get_ins(self, schema):
-        return self.base_ins.get(schema.uid) or schema.ins
+        res_ins = {}
+        for pin, val in schema.ins.items():
+            if self.base_ins.get(schema.uid):
+                base_val = self.base_ins[schema.uid].get(pin)
+                res_ins.update({pin: base_val or val})
+            else:
+                res_ins.update({pin: val})
+        return res_ins
 
     def get_outs(self, schema):
         return schema.outs
