@@ -1,3 +1,6 @@
+import json
+
+
 class EventMixin(object):
     def click_listen(self, callback):
         event_name = '<Button-1>'
@@ -19,3 +22,6 @@ class EventMixin(object):
     def emit(self, event_name, data):
         event_name = '<<{}>>'.format(event_name)
         self.parent.event_generate(event_name, data=data)
+
+    def serialize(self, str):
+        return json.loads(str.replace("'", "\""))

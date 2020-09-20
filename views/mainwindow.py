@@ -1,12 +1,14 @@
 import tkinter as tk
+import tkinter.ttk as ttk
+from views.windows.referencewindow import ReferenceWindow
 from views.containers.canvas import Canvas
 from views.containers.pinstable import PinsTable
 from views.containers.executepanel import ExecutePanel
 from views.mixins.eventmixin import EventMixin
-import json
+from views.mixins.windowmixin import WindowMixin
 
 
-class MainWindow(EventMixin, tk.Tk):
+class MainWindow(WindowMixin, EventMixin, tk.Tk):
     def __init__(self, collect_manager=None):
         super().__init__()
         self.title('AutoRAM')
@@ -26,6 +28,10 @@ class MainWindow(EventMixin, tk.Tk):
 
         self.execute_panel = ExecutePanel(self, execute_panel_width, execute_panel_height)
         self.execute_panel.pack(side='top', anchor='nw', padx=5, pady=5)
+
+        self.reference_panel = ttk.LabelFrame(self, text='Info')
+        self.reference_panel.pack(side='top', anchor='nw', padx=5, pady=5)
+        ttk.Button(self.reference_panel, text='References', command=lambda: ReferenceWindow()).pack(padx=60, pady=10)
 
         pins_table_width = self.init_width - canvas_width
         pins_table_height = 0
@@ -76,12 +82,6 @@ class MainWindow(EventMixin, tk.Tk):
         pin, val = pin_val
         self.pins_table.set_base_pin(pin)
         self.collect_manager.set_base_ins(schema, {pin: val})
-
-    def geometry(self, params):
-        super().geometry('{}x{}+{}+{}'.format(*params))
-
-    def serialize(self, str):
-        return json.loads(str.replace("'", "\""))
 
     def execute(self):
         self.mainloop()

@@ -8,8 +8,8 @@ class ExecutePanel(EventMixin, ttk.LabelFrame):
         self.run_button = ttk.Button(self, text='Run', width=5, command=self.run)
         self.clear_button = ttk.Button(self, text='Clear', width=5, command=self.clear)
 
-        self.run_button.pack(side='left', padx=10, ipadx=20)
-        self.clear_button.pack(side='left', padx=10, ipadx=20)
+        self.run_button.pack(side='left', padx=10, ipadx=14)
+        self.clear_button.pack(side='left', padx=10, ipadx=14)
         self.parent = parent
 
     def run(self):
