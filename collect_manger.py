@@ -66,7 +66,9 @@ class CollectManager(object):
         for pin, val in schema.ins.items():
             if self.base_ins.get(schema.uid):
                 base_val = self.base_ins[schema.uid].get(pin)
-                res_ins.update({pin: base_val or val})
+                if base_val is not None:
+                    val = base_val
+                res_ins.update({pin: val})
             else:
                 res_ins.update({pin: val})
         return res_ins
@@ -109,9 +111,9 @@ class CollectManager(object):
                 self.iter(self.collect[schema_from_uid], True, logs)
 
         self.visited[schema_cur.uid] = True
-        schema_cur.ins = self.base_ins.get(schema_cur.uid) or schema_cur.ins
+        schema_cur.ins = self.get_ins(schema_cur)
         schema_cur.f()
-        outs = schema_cur.outs
+        outs = self.get_outs(schema_cur)
 
         if logs:
             self.log(1, schema_cur.code, schema_cur.uid, schema_cur.ins, outs)

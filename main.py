@@ -39,20 +39,16 @@ def main():
     cm.add(and1)
     cm.add(and2)
 
-    # cm.set_base_ins(decryptor, {'A0': 1, 'A1': 1, 'A2': 1})
-    # cm.set_base_ins(multiplexer, {'A0': 0, 'A1': 1, 'A2': 0})
-    # cm.set_base_ins(and1, {'X1': 1, 'X2': 1})
-    cm.set_base_schema(decryptor)
-
     mw = MainWindow(cm)
     mw.canvas.schema(decryptor, [50, 50]).draw()
     mw.canvas.matrix(matrix, [200, 50]).draw()
     mw.canvas.schema(multiplexer, [360, 250]).draw()
     mw.canvas.schema(and1, [360, 460]).draw()
     mw.canvas.schema(and2, [520, 420]).draw()
-    cons = mw.canvas.connections()
-    for con in cons:
-        con.draw()
+    connections = mw.canvas.connections()
+    for connection in connections:
+        connection.draw()
+
     mw.execute()
 
 

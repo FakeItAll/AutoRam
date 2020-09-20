@@ -62,6 +62,7 @@ class MainWindow(EventMixin, tk.Tk):
     def run_handler(self, e):
         self.collect_manager.execute(self.logs)
         if self.selected_uid:
+            print(self.get_selected_data())
             self.pins_table.refresh(*self.get_selected_data())
 
     def clear_handler(self, e):

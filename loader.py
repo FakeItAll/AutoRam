@@ -6,24 +6,25 @@ class Loader(object):
         self.dir = dir
         self.modules = {}
 
-    def load_schema(self, name):
-        if self.modules.get(name):
-            return self.modules[name].Schema()
-
-        if self.dir:
-            path = self.dir + name + '.py'
-            module_spec = imp_util.spec_from_file_location(name, path)
+    def load_schema(self, module_name):
+        if self.modules.get(module_name):
+            module = self.modules[module_name]
         else:
-            module_spec = imp_util.find_spec(name)
+            if self.dir:
+                path = self.dir + module_name + '.py'
+                module_spec = imp_util.spec_from_file_location(module_name, path)
+            else:
+                path = module_name
+                module_spec = imp_util.find_spec(module_name)
 
-        if not module_spec:
-            print('Module {} not found!'.format(name))
-            return None
+            try:
+                module = imp_util.module_from_spec(module_spec)
+                module_spec.loader.exec_module(module)
+            except Exception:
+                raise ImportError('Модуль {} не найден'.format(path))
+                return None
+            self.modules.update({module_name: module})
 
-        module = imp_util.module_from_spec(module_spec)
-        module_spec.loader.exec_module(module)
-
-        self.modules.update({name: module})
         schema = module.Schema()
         return schema
 
