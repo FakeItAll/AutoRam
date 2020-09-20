@@ -4,7 +4,7 @@ import tkinter as tk
 
 class ExecutePanel(EventMixin, tk.LabelFrame):
     def __init__(self, parent, width, height):
-        super().__init__(parent, text='ExecutePanel', width=width, padx=5, pady=10)
+        super().__init__(parent, text='ExecutePanel', width=width, height=height, padx=5, pady=10)
         self.run_button = tk.Button(self, text='Run', command=self.run)
         self.clear_button = tk.Button(self, text='Clear', command=self.clear)
 

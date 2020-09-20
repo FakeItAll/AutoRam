@@ -7,8 +7,11 @@ from connectorui import ConnectorUI
 
 
 class Canvas(CanvasMixin, EventMixin, tk.Canvas):
-    def __init__(self, parent, width, bg_color):
-        super().__init__(parent, width=width, bg=bg_color)
+    def __init__(self, parent, width, height):
+        self.bg_color = '#CCF'
+
+        super().__init__(parent, width=width, bg=self.bg_color)
+
         self.click_listen(self.click_handler)
         self.select_flag = False
         self.parent = parent

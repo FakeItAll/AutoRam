@@ -16,14 +16,20 @@ class MainWindow(EventMixin, tk.Tk):
         self.geometry([self.init_width, self.init_height, 100, 100])
 
         canvas_width = self.init_width * 2 // 3
-        canvas_color = '#DBF'
-        self.canvas = Canvas(self, canvas_width, canvas_color)
+        canvas_height = self.init_height - 10
+
+        self.canvas = Canvas(self, canvas_width, canvas_height)
         self.canvas.pack(side='left', fill=tk.Y)
 
-        self.execute_panel = ExecutePanel(self, self.init_width - canvas_width, 100)
+        execute_panel_width = self.init_width - canvas_width
+        execute_panel_height = 100
+
+        self.execute_panel = ExecutePanel(self, execute_panel_width, execute_panel_height)
         self.execute_panel.pack(side='top', pady=5)
 
-        self.pinstable = PinsTable(self, self.init_width - canvas_width)
+        pins_table_width = self.init_width - canvas_width
+        pins_table_height = 0
+        self.pins_table = PinsTable(self, pins_table_width, pins_table_height)
 
         self.collect_manager = collect_manager
         self.selected_uid = ''
@@ -44,28 +50,30 @@ class MainWindow(EventMixin, tk.Tk):
 
     def select_handler(self, uid):
         self.selected_uid = uid
-        self.pinstable.pack(side='top', pady=5)
-        self.pinstable.set(*self.get_selected_data())
+        self.pins_table.pack(side='top', pady=5)
+        self.pins_table.select(*self.get_selected_data())
 
     def unselect_handler(self, e):
-        self.pinstable.pack_forget()
-        self.pinstable.clear()
+        self.pins_table.pack_forget()
+        self.pins_table.unselect()
         self.selected_uid = ''
 
     def run_handler(self, e):
         self.collect_manager.execute(self.logs)
         if self.selected_uid:
-            self.pinstable.refresh(*self.get_selected_data())
+            self.pins_table.refresh(*self.get_selected_data())
 
     def clear_handler(self, e):
         self.collect_manager.clear()
         if self.selected_uid:
-            self.pinstable.refresh(*self.get_selected_data())
+            self.pins_table.clear()
+            self.pins_table.refresh(*self.get_selected_data())
 
     def change_handler(self, e):
         pin_val = self.serialize(e)
         schema = self.collect_manager.get(self.selected_uid)
         pin, val = pin_val
+        self.pins_table.set_base_pin(pin)
         self.collect_manager.set_base_ins(schema, {pin: val})
 
     def geometry(self, params):

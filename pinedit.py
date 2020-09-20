@@ -3,17 +3,6 @@ from eventmixin import EventMixin
 
 
 class PinEdit(EventMixin, tk.Spinbox):
-    def valid(self, value):
-        if value == '' or value == '0' or value == '1':
-            if value == '0' or value == '1':
-                self.emit('OnChange', [self.pin, value])
-                if value == '0':
-                    self.set_font()
-                else:
-                    self.set_font(False)
-            return True
-        return False
-
     def __init__(self, parent, pin, val, is_active=True):
         self.parent = parent
         self.pin = pin
@@ -21,6 +10,7 @@ class PinEdit(EventMixin, tk.Spinbox):
 
         self.font_normal = 'Arial 10'
         self.font_bold = 'Arial 10 bold'
+        self.not_user_flag = False
 
         vc = (parent.register(self.valid), "%P")
 
@@ -34,11 +24,27 @@ class PinEdit(EventMixin, tk.Spinbox):
         self.set(val)
         self.config(validate='all', validatecommand=vc)
 
-    def set(self, val):
+    def valid(self, value):
+        if value == '' or value == '0' or value == '1':
+            if value == '0' or value == '1':
+                if self.not_user_flag:
+                    self.not_user_flag = False
+                else:
+                    self.emit('OnChange', [self.pin, int(value)])
+                if value == '0':
+                    self.set_font()
+                else:
+                    self.set_font(False)
+            return True
+        return False
+
+    def set(self, val, user=True):
+        if not user:
+            self.not_user_flag = True
         self.val.set(val)
-        if int(val) == 0:
+        if val == 0:
             self.set_font()
-        else:
+        elif val == 1:
             self.set_font(False)
 
     def get(self):
