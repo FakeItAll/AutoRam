@@ -11,11 +11,11 @@ class MainWindow(EventMixin, tk.Tk):
         super().__init__()
         self.title('AutoRAM')
 
-        self.init_width = 1100
+        self.init_width = 1000
         self.init_height = 600
         self.geometry([self.init_width, self.init_height, 100, 100])
 
-        canvas_width = self.init_width * 2 // 3
+        canvas_width = self.init_width * 3 // 4
         canvas_height = self.init_height - 10
 
         self.canvas = Canvas(self, canvas_width, canvas_height)
@@ -25,7 +25,7 @@ class MainWindow(EventMixin, tk.Tk):
         execute_panel_height = 100
 
         self.execute_panel = ExecutePanel(self, execute_panel_width, execute_panel_height)
-        self.execute_panel.pack(side='top', pady=5)
+        self.execute_panel.pack(side='top', anchor='nw', padx=5, pady=5)
 
         pins_table_width = self.init_width - canvas_width
         pins_table_height = 0
@@ -46,11 +46,12 @@ class MainWindow(EventMixin, tk.Tk):
         schema = self.collect_manager.get(self.selected_uid)
         ins = self.collect_manager.get_ins(schema)
         outs = self.collect_manager.get_outs(schema)
-        return [ins, outs, schema.name]
+        base_ins = self.collect_manager.get_base_ins(schema)
+        return [ins, outs, base_ins, schema.name]
 
     def select_handler(self, uid):
         self.selected_uid = uid
-        self.pins_table.pack(side='top', pady=5)
+        self.pins_table.pack(side='top', anchor='nw', padx=5, pady=5)
         self.pins_table.select(*self.get_selected_data())
 
     def unselect_handler(self, e):

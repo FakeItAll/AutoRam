@@ -5,18 +5,20 @@ from pinedit import PinEdit
 
 class PinsTable(tk.LabelFrame):
     def __init__(self, parent, width, height):
-        super().__init__(parent, width=width, height=height, padx=34, pady=10)
+        super().__init__(parent, width=width, height=height, padx=30, pady=10)
         self.collect_header = {'ins': None, 'outs': None}
         self.collect_labels = {'ins': {}, 'outs': {}}
         self.collect_pins = {'ins': {}, 'outs': {}}
         self.base_pins = []
         self.parent = parent
 
-    def select(self, ins, outs, name):
+    def select(self, ins, outs, base_ins, name):
         if self.collect_header['ins'] or self.collect_header['outs']:
             self.unselect()
 
         self.config(text=name)
+        if base_ins:
+            self.base_pins = list(base_ins.keys())
 
         label = tk.Label(self, text='Inputs')
         self.collect_header['ins'] = label
@@ -25,16 +27,12 @@ class PinsTable(tk.LabelFrame):
         label = tk.Label(self, text='Outputs')
         self.collect_header['outs'] = label
         label.grid(column=2, row=0, columnspan=2)
-        self.create_table(ins, outs)
+        self.create(ins, outs)
 
-    def create_table(self, ins, outs):
+    def create(self, ins, outs):
         row = 1
         for pin, val in ins.items():
-            if pin in self.base_pins:
-                text = '*{}'.format(pin)
-            else:
-                text = pin
-            label = PinLabel(self, text)
+            label = PinLabel(self, pin, pin in self.base_pins)
             label.grid(column=0, row=row)
             self.collect_labels['ins'][pin] = label
 
@@ -53,7 +51,9 @@ class PinsTable(tk.LabelFrame):
             self.collect_pins['outs'][pin] = edit
             row += 1
 
-    def refresh(self, ins, outs, name=''):
+    def refresh(self, ins, outs, base_ins, name=''):
+        if base_ins:
+            self.base_pins = list(base_ins.keys())
         for pin, val in ins.items():
             self.collect_labels['ins'][pin].set_base(pin in self.base_pins)
 

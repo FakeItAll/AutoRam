@@ -59,7 +59,7 @@ class CollectManager(object):
             self.base_ins.update({schema.uid: ins})
 
     def get_base_ins(self, schema):
-        return self.base_ins[schema.uid]
+        return self.base_ins.get(schema.uid)
 
     def get_ins(self, schema):
         res_ins = {}
