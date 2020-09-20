@@ -1,4 +1,4 @@
-from schemaui import SchemaUI
+from views.view_models.schemaui import SchemaUI
 
 
 class MatrixUI(SchemaUI):

@@ -1,10 +1,10 @@
-from loader import Loader
-from collect_manger import CollectManager
-from mainwindow import MainWindow
+from lib.loader import Loader
+from controllers.collect_manger import CollectManager
+from views.mainwindow import MainWindow
 
 
 def main():
-    L = Loader('schemas/')
+    L = Loader('models/schemas/')
 
     decryptor = L.load_schema('decryptor')
     matrix = L.load_schema('storage_matrix')

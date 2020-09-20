@@ -1,4 +1,4 @@
-from schemas.baseschema import BaseSchema
+from models.baseschema import BaseSchema
 
 
 class Schema(BaseSchema):

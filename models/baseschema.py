@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from schemas.connector import Connector
+from models.connector import Connector
 
 
 class BaseSchema(object):

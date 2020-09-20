@@ -1,8 +1,8 @@
 import tkinter as tk
-from canvas import Canvas
-from pinstable import PinsTable
-from executepanel import ExecutePanel
-from eventmixin import EventMixin
+from views.canvas import Canvas
+from views.pinstable import PinsTable
+from views.executepanel import ExecutePanel
+from views.mixins.eventmixin import EventMixin
 import json
 
 

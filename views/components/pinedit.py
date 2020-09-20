@@ -1,5 +1,5 @@
 import tkinter as tk
-from eventmixin import EventMixin
+from views.mixins.eventmixin import EventMixin
 
 
 class PinEdit(EventMixin, tk.Spinbox):
@@ -28,11 +28,14 @@ class PinEdit(EventMixin, tk.Spinbox):
         if value == '' or value == '0' or value == '1':
             if value == '0' or value == '1':
                 value = int(value)
-
+                print(self.pin + ' ' + str(value) + ' ' + str(self.get()))
+                print(str(self.not_user_flag) + ' ' + str(type(value)) + str(type(self.get())))
                 if self.not_user_flag:
                     self.not_user_flag = False
                 elif value != self.get():
+                    print('change')
                     self.emit('OnChange', [self.pin, value])
+                print()
 
                 if value == 0:
                     self.set_font()
@@ -42,9 +45,9 @@ class PinEdit(EventMixin, tk.Spinbox):
         return False
 
     def set(self, val, user=True):
-        if not user:
+        if not user and val != self.get():
             self.not_user_flag = True
-        self.val.set(val)
+            self.val.set(val)
         if val == 0:
             self.set_font()
         elif val == 1:

@@ -1,6 +1,6 @@
 import tkinter as tk
-from pinlabel import PinLabel
-from pinedit import PinEdit
+from views.components.pinlabel import PinLabel
+from views.components.pinedit import PinEdit
 
 
 class PinsTable(tk.LabelFrame):

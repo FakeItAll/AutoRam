@@ -1,4 +1,4 @@
-from eventmixin import EventMixin
+from views.mixins.eventmixin import EventMixin
 
 
 class SchemaUI(EventMixin):

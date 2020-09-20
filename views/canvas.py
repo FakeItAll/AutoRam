@@ -1,9 +1,9 @@
 import tkinter as tk
-from canvasmixin import CanvasMixin
-from eventmixin import EventMixin
-from schemaui import SchemaUI
-from matrixui import MatrixUI
-from connectorui import ConnectorUI
+from views.mixins.canvasmixin import CanvasMixin
+from views.mixins.eventmixin import EventMixin
+from views.view_models.schemaui import SchemaUI
+from views.view_models.matrixui import MatrixUI
+from views.view_models.connectorui import ConnectorUI
 
 
 class Canvas(CanvasMixin, EventMixin, tk.Canvas):
