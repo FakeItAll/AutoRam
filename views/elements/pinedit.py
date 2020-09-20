@@ -28,14 +28,11 @@ class PinEdit(EventMixin, tk.Spinbox):
         if value == '' or value == '0' or value == '1':
             if value == '0' or value == '1':
                 value = int(value)
-                print(self.pin + ' ' + str(value) + ' ' + str(self.get()))
-                print(str(self.not_user_flag) + ' ' + str(type(value)) + str(type(self.get())))
+
                 if self.not_user_flag:
                     self.not_user_flag = False
                 elif value != self.get():
-                    print('change')
                     self.emit('OnChange', [self.pin, value])
-                print()
 
                 if value == 0:
                     self.set_font()

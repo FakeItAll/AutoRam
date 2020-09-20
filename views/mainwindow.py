@@ -1,7 +1,7 @@
 import tkinter as tk
-from views.canvas import Canvas
-from views.pinstable import PinsTable
-from views.executepanel import ExecutePanel
+from views.containers.canvas import Canvas
+from views.containers.pinstable import PinsTable
+from views.containers.executepanel import ExecutePanel
 from views.mixins.eventmixin import EventMixin
 import json
 
@@ -62,7 +62,6 @@ class MainWindow(EventMixin, tk.Tk):
     def run_handler(self, e):
         self.collect_manager.execute(self.logs)
         if self.selected_uid:
-            print(self.get_selected_data())
             self.pins_table.refresh(*self.get_selected_data())
 
     def clear_handler(self, e):
