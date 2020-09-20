@@ -16,10 +16,10 @@ class Schema(BaseSchema):
 
     def f(self):
         self.outs['Y0'] = int(not self.ins['A0'] and not self.ins['A1'] and not self.ins['A2'])
-        self.outs['Y1'] = int(not self.ins['A0'] and not self.ins['A1'] and self.ins['A2'])
+        self.outs['Y1'] = int(self.ins['A0'] and not self.ins['A1'] and not self.ins['A2'])
         self.outs['Y2'] = int(not self.ins['A0'] and self.ins['A1'] and not self.ins['A2'])
-        self.outs['Y3'] = int(not self.ins['A0'] and self.ins['A1'] and self.ins['A2'])
-        self.outs['Y4'] = int(self.ins['A0'] and not self.ins['A1'] and not self.ins['A2'])
+        self.outs['Y3'] = int(self.ins['A0'] and self.ins['A1'] and not self.ins['A2'])
+        self.outs['Y4'] = int(not self.ins['A0'] and not self.ins['A1'] and self.ins['A2'])
         self.outs['Y5'] = int(self.ins['A0'] and not self.ins['A1'] and self.ins['A2'])
-        self.outs['Y6'] = int(self.ins['A0'] and self.ins['A1'] and not self.ins['A2'])
+        self.outs['Y6'] = int(not self.ins['A0'] and self.ins['A1'] and self.ins['A2'])
         self.outs['Y7'] = int(self.ins['A0'] and self.ins['A1'] and self.ins['A2'])

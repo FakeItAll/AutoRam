@@ -1,11 +1,11 @@
-import tkinter as tk
+import tkinter.ttk as ttk
 from views.elements.pinlabel import PinLabel
 from views.elements.pinedit import PinEdit
 
 
-class PinsTable(tk.LabelFrame):
+class PinsTable(ttk.LabelFrame):
     def __init__(self, parent, width, height):
-        super().__init__(parent, width=width, height=height, padx=30, pady=10)
+        super().__init__(parent, width=width, height=height, padding='30 10')
         self.collect_header = {'ins': None, 'outs': None}
         self.collect_labels = {'ins': {}, 'outs': {}}
         self.collect_pins = {'ins': {}, 'outs': {}}
@@ -20,11 +20,11 @@ class PinsTable(tk.LabelFrame):
         if base_ins:
             self.base_pins = list(base_ins.keys())
 
-        label = tk.Label(self, text='Inputs')
+        label = ttk.Label(self, text='Inputs')
         self.collect_header['ins'] = label
         label.grid(column=0, row=0, columnspan=2)
 
-        label = tk.Label(self, text='Outputs')
+        label = ttk.Label(self, text='Outputs')
         self.collect_header['outs'] = label
         label.grid(column=2, row=0, columnspan=2)
         self.create(ins, outs)

@@ -1,7 +1,7 @@
-import tkinter as tk
+import tkinter.ttk as ttk
 
 
-class PinLabel(tk.Label):
+class PinLabel(ttk.Label):
     def __init__(self, parent, text, base=False):
         super().__init__(parent, text=text)
 
