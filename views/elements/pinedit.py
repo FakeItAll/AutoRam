@@ -21,7 +21,7 @@ class PinEdit(EventMixin, tk.Spinbox):
                          width=5,
                          state=tk.NORMAL if is_active else tk.DISABLED,
                          disabledforeground='#000')
-        self.set(val)
+        self.set(val, False)
         self.config(validate='all', validatecommand=vc)
 
     def valid(self, value):
