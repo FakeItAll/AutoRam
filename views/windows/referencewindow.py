@@ -8,8 +8,8 @@ class ReferenceWindow(WindowMixin, tk.Toplevel):
     def __init__(self):
         super().__init__()
         self.title('References')
-        self.init_width = 800
-        self.init_height = 600
+        self.init_width = 1000
+        self.init_height = 800
         self.geometry([self.init_width, self.init_height, 100, 100])
 
         frame = HtmlViewer(self, self.init_width, self.init_height)

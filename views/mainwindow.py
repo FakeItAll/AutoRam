@@ -1,6 +1,7 @@
 import tkinter as tk
 import tkinter.ttk as ttk
 from views.windows.referencewindow import ReferenceWindow
+from views.windows.webviewwindow import WebViewWindow
 from views.frames.canvas import Canvas
 from views.frames.pinstable import PinsTable
 from views.frames.executepanel import ExecutePanel
@@ -31,7 +32,7 @@ class MainWindow(WindowMixin, EventMixin, tk.Tk):
 
         self.reference_panel = ttk.LabelFrame(self, text='Info')
         self.reference_panel.pack(side='top', anchor='nw', padx=5, pady=5)
-        ttk.Button(self.reference_panel, text='References', command=lambda: ReferenceWindow()).pack(padx=60, pady=10)
+        ttk.Button(self.reference_panel, text='References', command=lambda: WebViewWindow()).pack(padx=60, pady=10)
 
         pins_table_width = self.init_width - canvas_width
         pins_table_height = 0

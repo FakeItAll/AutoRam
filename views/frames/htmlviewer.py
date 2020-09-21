@@ -27,8 +27,13 @@ class HtmlViewer(ttk.Frame):
         self.next_button.pack(side='left')
 
         self.html_frame = TkinterHtml(self,
-                                      fontscale=0.8,
+                                      width=width,
+                                      height=height-50,
+                                      fontscale=0.7,
                                       imagecmd=self.load_img)
+        vsb = ttk.Scrollbar(self, orient='vertical', command=self.html_frame.yview)
+        self.html_frame.configure(yscrollcommand=vsb)
+        vsb.pack(side='right')
         self.html_frame.pack()
 
         self.load_files()
