@@ -1,9 +1,9 @@
 import tkinter as tk
 import tkinter.ttk as ttk
 from views.windows.referencewindow import ReferenceWindow
-from views.containers.canvas import Canvas
-from views.containers.pinstable import PinsTable
-from views.containers.executepanel import ExecutePanel
+from views.frames.canvas import Canvas
+from views.frames.pinstable import PinsTable
+from views.frames.executepanel import ExecutePanel
 from views.mixins.eventmixin import EventMixin
 from views.mixins.windowmixin import WindowMixin
 
