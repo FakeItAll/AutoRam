@@ -1,6 +1,5 @@
 import tkinter as tk
 import tkinter.ttk as ttk
-from views.windows.referencewindow import ReferenceWindow
 from views.windows.webviewwindow import WebViewWindow
 from views.frames.canvas import Canvas
 from views.frames.pinstable import PinsTable
